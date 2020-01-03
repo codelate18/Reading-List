@@ -1,27 +1,18 @@
-import React, { createContext, useState } from "react";
-import uuid from "uuid/v1";
+import React, { createContext, useState, useReducer } from "react";
+import { bookReducer } from "../reducers/bookReducer";
 
 export const BookContext = createContext();
 
 const BookContextProvider = props => {
-  const [books, setBooks] = useState([
-    { title: "Name of the Wind", author: "Patrick Rothfuss", id: 1 },
-    { title: "The Final Empire", author: "Brandon Sanderson", id: 2 }
-  ]);
+  // set initial state to an empty array, no books
+  //use dispatch instead of setBooks
+  const [books, dispatch] = useReducer(bookReducer, []);
 
   // function to add books
 
-  const addBook = (title, author) => {
-    setBooks([...books, { title, author, id: uuid() }]);
-  };
-
-  //function to remove book
-
-  const removeBook = id => {
-    setBooks(books.filter(book => book.id !== id));
-  };
+  //remove the existing add and remove functions since we are now using bookReducer component
   return (
-    <BookContext.Provider value={{ books, addBook, removeBook }}>
+    <BookContext.Provider value={{ books, dispatch }}>
       {props.children}
     </BookContext.Provider>
   );
